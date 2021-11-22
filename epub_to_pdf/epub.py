@@ -2,6 +2,7 @@ import os
 import shutil
 
 from zipfile import ZipFile
+from bs4 import BeautifulSoup
 
 
 class InvalidEpubFile(Exception):
@@ -17,6 +18,16 @@ class EpubFileNotFound(Exception):
 class TemporalDirectoryAlreadyExists(Exception):
     def __str__(self) -> str:
         return f"Attempted to create a temporal directory but one already exists."
+
+
+class NcxNotFound(Exception):
+    def __str__(self) -> str:
+        return "The NCX file wasn't found int the provided EPUB file."
+
+
+class NcxMissingRootfile(Exception):
+    def __str__(self) -> str:
+        return "Mising rootfile in the current NCX"
 
 
 def into_pdf(path: str):
@@ -67,3 +78,37 @@ def extract_zip(zip_file_path: str, extract_dir_path: str):
     """
     with ZipFile(zip_file_path, "r") as zip:
         zip.extractall(extract_dir_path)
+
+
+def open_ncx(tmp_dir_path: str):
+    """
+    Retrieves the Navigation Control XML (NCX) file contained in EPUB files as
+    pointed out in the EPUB eBook Specification.
+
+    The NCX file is deprecated and was replaced in EPUB v3 by the
+    EPUB Navigation Document.
+
+    ## References
+
+    Refer: https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf2-ncx
+    """
+    try:
+        ncx_file_path = f"{tmp_dir_path}/META-INF/container.xml"
+        with open(ncx_file_path, "r") as ncx:
+            contents = ncx.read()
+            soup = BeautifulSoup(contents, "html.parser")
+            rootfiles = soup.find_all("rootfile")
+
+            if len(rootfiles) > 0:
+                return parse_rootfiles(rootfiles)
+
+            raise NcxMissingRootfile
+    except FileNotFoundError:
+        # The actual error at this point is a "FileNotFound", but in order to
+        # give more context we are actually raising a "NcxNotFound" exception.
+        raise NcxNotFound
+
+
+def parse_rootfiles(rootfiles):
+    print(rootfiles)
+    raise NotImplemented
