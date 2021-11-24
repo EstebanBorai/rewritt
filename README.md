@@ -9,7 +9,7 @@ Create a PDF from the provided EPUB with the same name in the current working
 directory (CWD).
 
 ```bash
-epub_to_pdf ./filename.epub
+rahool ./filename.epub
 ```
 
 ## Development
@@ -45,6 +45,21 @@ capable of decrypting "Engrams".
 
 Given that some apps aren't able to open EPUB files and my main goal is to have
 these files available in my favorite PDF reader I'm calling this project Rahool.
+
+### Code Style
+
+We use Black for code styling in this repository.
+Install Black as follows:
+
+```bash
+pipenv install black
+```
+
+Then execute it against all Python files in the codebase:
+
+```bash
+python -m black ./**/*.py
+```
 
 ## License
 
