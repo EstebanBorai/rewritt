@@ -36,3 +36,8 @@ class ManifestNotFound(Exception):
 class MissingHrefForNcxTag(Exception):
     def __str__(self) -> str:
         return "The NCX tag lacks of a path to the NCX file."
+
+
+class FailedToDispose(Exception):
+    def __str__(self) -> str:
+        return "Failed to dispose resource."
