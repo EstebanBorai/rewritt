@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  dev:
+    build: .
+    command: python rahool input.epub
+    volumes:
+      - .:/usr/src/app
