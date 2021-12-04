@@ -27,6 +27,9 @@ class Epub:
         self.ncx = None
 
     def open(self):
+        if self.ncx is not None:
+            return self.ncx
+
         try:
             self.zip_copy_path = self._copy_as_zip(self.path)
             self.tmp_dir_path = self._create_temporal_directory()

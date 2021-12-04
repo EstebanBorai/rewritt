@@ -27,6 +27,8 @@ class Ncx:
 
         Refer: https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf2-ncx
         """
+        if self.content is not None:
+            return self.content
 
         try:
             container_file_path = f"{self.path}/META-INF/container.xml"
