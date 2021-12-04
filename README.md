@@ -61,6 +61,19 @@ Then execute it against all Python files in the codebase:
 python -m black ./**/*.py
 ```
 
+### Pyright Config
+
+If you are using Pyright make sure you create a config file like the
+following with the contents:
+
+```js
+// pyrightconfig.json
+{
+  "venvPath": "<Virtual Environments Directory Path>",
+  "venv": "<Virtual Environment Directory Name>",
+}
+```
+
 ## License
 
 Licensed under the MIT License

@@ -4,5 +4,6 @@ tmp
 
 # Files
 .DS_Store
+pyrightconfig.json
 *.epub
 *.zip
