@@ -12,6 +12,17 @@ directory (CWD).
 rahool ./filename.epub
 ```
 
+> You may need to setup weasyprint dependencies to run the application this way
+
+### Run with Docker
+
+A docker image is included to run this application without having to setup every
+depencency manually.
+
+```bash
+docker-compose up
+```
+
 ## Development
 
 This project makes use of `pyenv` and `pipenv`, make sure you install the
