@@ -14,6 +14,8 @@ class Pdf:
         self.contents_dir = None
         self.epub = None
         self.tmp_dir_path = None
+        self.tmp_pdf_path = None
+        self.pdf_contents = None
 
     def _ensure_pdf_output_dir(self, tmp_dir_path: Optional[str]) -> str:
         """
@@ -44,9 +46,14 @@ class Pdf:
 
         return tmp_pdf_path
 
-    def _write(self, contents: str):
-        html = HTML("HEllo")
-        html.write_pdf("out.pdf")
+    def _write(self):
+        if self.tmp_pdf_path is None:
+            raise MissingTmpDirPath
+
+        out_path = os.path.join(self.tmp_pdf_path, r"out.pdf")
+
+        html = HTML(os.path.join(self.tmp_pdf_path, r"pdf_contents.html"))
+        html.write_pdf(out_path)
 
     def from_epub(self, epub: Epub):
         self.epub = epub
@@ -69,12 +76,10 @@ class Pdf:
         if self.tmp_dir_path is None:
             raise MissingTmpDirPath()
 
-        tmp_pdf_path = self._ensure_pdf_output_dir(self.tmp_dir_path)
+        self.tmp_pdf_path = self._ensure_pdf_output_dir(self.tmp_dir_path)
+        self.pdf_contents = str()
 
-        self._write(tmp_pdf_path)
+        for page_source in self.pages_sources:
+            text_file_path = os.path.join(self.tmp_dir_path, page_source)
 
-        # for page_source in self.pages_sources:
-        #     text_file_path = os.path.join(self.tmp_dir_path, page_source)
-        #     text_file_copy_path = os.path.join(tmp_pdf_path, page_source)
 
-        #     shutil.copy2(text_file_path, text_file_copy_path)
