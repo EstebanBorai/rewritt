@@ -1,8 +1,11 @@
 version: '3'
 
 services:
-  dev:
+  api:
     build: .
-    command: python rahool input.epub
+    environment:
+      FLASK_ENV: 'development'
+    ports:
+      - '5000:5000'
     volumes:
       - .:/usr/src/app

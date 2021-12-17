@@ -2,6 +2,12 @@ FROM python:3.10.0-alpine3.14
 
 WORKDIR /usr/src/app
 
+ENV FLASK_APP=rahool/main.py
+
+ENV FLASK_RUN_HOST=0.0.0.0
+
+COPY requirements.txt .
+
 RUN apk add --no-cache \
       gcc \
       g++ \
@@ -32,3 +38,5 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY ./rahool ./rahool
+
+CMD ["flask", "run"]

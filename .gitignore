@@ -1,9 +1,11 @@
 # Directories
 __pycache__
 tmp
+uploads/*
 
 # Files
 .DS_Store
 pyrightconfig.json
+!uploads/.gitkeep
 *.epub
 *.zip

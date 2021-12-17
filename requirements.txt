@@ -4,9 +4,11 @@ CairoSVG==2.5.2
 cffi==1.15.0
 cssselect2==0.4.1
 fonttools==4.28.3
+Flask==2.0.1
 html5lib==1.1
 lxml==4.6.4
 Pillow==8.4.0
 pydyf==0.1.2
 Pyphen==0.11.0
 weasyprint==53.4
+Werkzeug==2.0.2
