@@ -4,12 +4,14 @@ import uuid
 from converter.epub import Epub
 from converter.pdf import Pdf
 from flask import Flask, request, send_file, send_from_directory, redirect
+from flask_cors import CORS
 from flask.helpers import safe_join
 from werkzeug.utils import secure_filename
 
 app = Flask("rewritt - EPUB to PDF Conversion")
 app.config["UPLOAD_FOLDER"] = "uploads"
 
+CORS(app)
 
 def is_allowed_file(filename: str) -> bool:
     return "." in filename and filename.rsplit(".", 1)[1].lower() in {"epub"}
