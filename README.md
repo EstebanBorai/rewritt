@@ -5,6 +5,16 @@
   </p>
 </div>
 
+## Motivation
+
+Some of my virtual library books are EPUB files, but this format is not supported
+by my favorite reading application, [PDFExpert from Readdle], the name makes
+very obvious that the application is specialized on PDF file reading.
+
+So I wanted to write my own conversion helper, theres a lot of work to be done
+with this solution, but as most of the setup is done and main conversion (text
+only) is already supported, all I have left is working on a complete conversion.
+
 ## Usage
 
 ### Run with Docker
