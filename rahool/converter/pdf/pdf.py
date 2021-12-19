@@ -2,11 +2,10 @@ import os
 
 from typing import Optional
 from bs4 import BeautifulSoup
-from epub import Epub
-from epub.ncx import Ncx
 from weasyprint import HTML
 
 from .errors import EpubMissingNcx, MissingTmpDirPath, TmpPathDoesntExists
+from ..epub import Epub
 
 
 class Pdf:
@@ -54,6 +53,9 @@ class Pdf:
 
         html = HTML(os.path.join(self.tmp_pdf_path, r"pdf_contents.html"))
         html.write_pdf(out_path)
+        file = open(out_path, 'r')
+
+        return file
 
     def from_epub(self, epub: Epub):
         self.epub = epub
@@ -81,5 +83,10 @@ class Pdf:
 
         for page_source in self.pages_sources:
             text_file_path = os.path.join(self.tmp_dir_path, page_source)
+            with open(text_file_path, 'r') as xhtml:
+                self.pdf_contents += xhtml.read()
 
+        with open(os.path.join(self.tmp_pdf_path, r"pdf_contents.html"), 'w') as pdf_contents:
+            pdf_contents.write(self.pdf_contents)
 
+        return self._write()

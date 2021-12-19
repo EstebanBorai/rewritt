@@ -1,5 +1,8 @@
 import os
+import uuid
 
+from converter.epub import Epub
+from converter.pdf import Pdf
 from flask import Flask, request
 from werkzeug.utils import secure_filename
 
@@ -8,20 +11,35 @@ app.config["UPLOAD_FOLDER"] = "uploads"
 
 
 def is_allowed_file(filename: str) -> bool:
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in {"epub", "png"}
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in {"epub"}
 
 
 @app.post("/api/v1/convert")
 def upload_file():
     file = request.files["file"]
+    working_dir_name = str(uuid.uuid4())
 
     if file:
         filename = secure_filename(file.filename)
         if is_allowed_file(filename):
-            file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-            return filename
+            uploaded_file_working_dir = os.path.join(
+                app.config["UPLOAD_FOLDER"], working_dir_name
+            )
+            os.makedirs(uploaded_file_working_dir)
+            uploaded_file_name = "upload.epub"
 
-    return "no file"
+            file.save(uploaded_file_working_dir + f"/{uploaded_file_name}")
+
+            epub = Epub(uploaded_file_working_dir, uploaded_file_name)
+            epub.open()
+
+            pdf = Pdf()
+            pdf.from_epub(epub)
+            pdf.write_book()
+
+            epub.dispose()
+
+    return "No file provided"
 
 
 @app.route("/")

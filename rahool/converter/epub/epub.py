@@ -21,8 +21,10 @@ def cleanup(tmp_dir_path: str, zip_copy_path: str):
 
 
 class Epub:
-    def __init__(self, path: str) -> None:
-        self.path = path
+    def __init__(self, working_dir: str, filename: str) -> None:
+        self.filename = filename
+        self.path = working_dir
+        self.fullpath = os.path.join(working_dir, filename)
         self.tmp_dir_path = None
         self.ncx = None
 
@@ -31,7 +33,7 @@ class Epub:
             return self.ncx
 
         try:
-            self.zip_copy_path = self._copy_as_zip(self.path)
+            self.zip_copy_path = self._copy_as_zip(self.fullpath)
             self.tmp_dir_path = self._create_temporal_directory()
             self._extract_zip(self.zip_copy_path, self.tmp_dir_path)
 
@@ -62,8 +64,10 @@ class Epub:
         Creates a copy of the EPUB file provided as "path" and return the path to
         the copied file renamed as ZIP.
         """
-        if path.endswith(".epub"):
-            if os.path.isfile(path):
+        filepath = self.path + '/' + self.filename
+
+        if filepath.endswith(".epub"):
+            if os.path.isfile(filepath):
                 new_name = path.replace(".epub", ".zip")
                 shutil.copyfile(path, new_name)
 
@@ -78,8 +82,7 @@ class Epub:
         Attempts to create a "tmp" directory in the current working directory.
         Returns the path to the created directory if successful.
         """
-        cwd = os.getcwd()
-        tmp = os.path.join(cwd, r"tmp")
+        tmp = os.path.join(self.path, r"tmp")
 
         if not os.path.exists(tmp):
             os.makedirs(tmp)
