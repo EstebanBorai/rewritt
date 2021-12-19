@@ -2,7 +2,7 @@ FROM python:3.10.0-alpine3.14
 
 WORKDIR /usr/src/app
 
-ENV FLASK_APP=rahool/main.py
+ENV FLASK_APP=rewritt/main.py
 
 ENV FLASK_RUN_HOST=0.0.0.0
 
@@ -37,6 +37,6 @@ COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY ./rahool ./rahool
+COPY ./rewritt ./rewritt
 
 CMD ["flask", "run"]

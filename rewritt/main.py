@@ -6,7 +6,7 @@ from converter.pdf import Pdf
 from flask import Flask, request, send_file
 from werkzeug.utils import secure_filename
 
-app = Flask("Rahool - EPUB to PDF Conversion")
+app = Flask("rewritt - EPUB to PDF Conversion")
 app.config["UPLOAD_FOLDER"] = "uploads"
 
 
@@ -47,7 +47,7 @@ def upload_file():
 def index():
     return """
     <!doctype html>
-    <title>Welcome to Rahool!</title>
+    <title>Welcome to rewritt!</title>
     <h1>Upload new File</h1>
     <form method="post" enctype="multipart/form-data" action="/api/v1/convert" />
       <input type="file" name="file" />
@@ -56,4 +56,4 @@ def index():
     """
 
 
-app.run("0.0.0.0", 5000)
+app.run("0.0.0.0", os.environ["PORT"])
