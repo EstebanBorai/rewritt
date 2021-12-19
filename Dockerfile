@@ -1,10 +1,14 @@
-FROM python:3.10.0-alpine3.14
+FROM nikolaik/python-nodejs:python3.10-nodejs16-alpine
 
 WORKDIR /usr/src/app
 
 ENV FLASK_APP=rewritt/main.py
 
 ENV FLASK_RUN_HOST=0.0.0.0
+
+ENV NODE_VERSION=16.13.0
+
+ENV NVM_DIR=/root/.nvm
 
 COPY requirements.txt .
 
@@ -37,6 +41,20 @@ COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
+RUN npm install -g pnpm
+
 COPY ./rewritt ./rewritt
+
+COPY ./bin ./bin
+
+COPY ./client ./client
+
+RUN mkdir static
+
+WORKDIR /usr/src/app/client
+
+RUN pnpm install && pnpm run build && mv ./build/** ../static
+
+WORKDIR /usr/src/app
 
 CMD ["flask", "run"]

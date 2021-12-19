@@ -3,7 +3,8 @@ import uuid
 
 from converter.epub import Epub
 from converter.pdf import Pdf
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, send_from_directory, redirect
+from flask.helpers import safe_join
 from werkzeug.utils import secure_filename
 
 app = Flask("rewritt - EPUB to PDF Conversion")
@@ -43,17 +44,16 @@ def upload_file():
     return "No file provided"
 
 
+@app.route("/<path:path>")
+def _static(path):
+    if os.path.isdir(safe_join("static", path)):
+        path = os.path.join(path, "index.html")
+    return send_from_directory("static", path)
+
+
 @app.route("/")
 def index():
-    return """
-    <!doctype html>
-    <title>Welcome to rewritt!</title>
-    <h1>Upload new File</h1>
-    <form method="post" enctype="multipart/form-data" action="/api/v1/convert" />
-      <input type="file" name="file" />
-      <input type="submit" value="Upload" />
-    </form>
-    """
+    return redirect("/index.html", 302)
 
 
 app.run("0.0.0.0", os.environ["PORT"])
