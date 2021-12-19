@@ -45,17 +45,16 @@ class Pdf:
 
         return tmp_pdf_path
 
-    def _write(self):
+    def _write(self, output_filename: str) -> str:
         if self.tmp_pdf_path is None:
             raise MissingTmpDirPath
 
-        out_path = os.path.join(self.tmp_pdf_path, r"out.pdf")
+        out_path = os.path.join(self.tmp_pdf_path, output_filename)
 
         html = HTML(os.path.join(self.tmp_pdf_path, r"pdf_contents.html"))
         html.write_pdf(out_path)
-        file = open(out_path, 'r')
-
-        return file
+        print(out_path)
+        return out_path
 
     def from_epub(self, epub: Epub):
         self.epub = epub
@@ -74,7 +73,7 @@ class Pdf:
             page_path = source.split("#")[0]
             self.pages_sources.append(page_path)
 
-    def write_book(self):
+    def write_book(self, output_filename: str) -> str:
         if self.tmp_dir_path is None:
             raise MissingTmpDirPath()
 
@@ -89,4 +88,4 @@ class Pdf:
         with open(os.path.join(self.tmp_pdf_path, r"pdf_contents.html"), 'w') as pdf_contents:
             pdf_contents.write(self.pdf_contents)
 
-        return self._write()
+        return self._write(output_filename)

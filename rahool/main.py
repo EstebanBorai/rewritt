@@ -3,7 +3,7 @@ import uuid
 
 from converter.epub import Epub
 from converter.pdf import Pdf
-from flask import Flask, request
+from flask import Flask, request, send_file
 from werkzeug.utils import secure_filename
 
 app = Flask("Rahool - EPUB to PDF Conversion")
@@ -35,9 +35,10 @@ def upload_file():
 
             pdf = Pdf()
             pdf.from_epub(epub)
-            pdf.write_book()
+            output_filename = filename.replace(".epub", ".pdf")
+            output_path = pdf.write_book(output_filename)
 
-            epub.dispose()
+            return send_file(output_path)
 
     return "No file provided"
 
